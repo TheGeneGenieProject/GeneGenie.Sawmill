@@ -9,7 +9,7 @@ namespace GeneGenie.Sawmill.Console.Setup
     using System.IO;
     using Microsoft.Extensions.Configuration;
 
-    public class ConfigureSettings
+    public static class ConfigureSettings
     {
         internal static IConfigurationRoot Build(string[] args)
         {

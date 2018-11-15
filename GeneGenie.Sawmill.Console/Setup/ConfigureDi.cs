@@ -13,7 +13,7 @@ namespace GeneGenie.Sawmill.Console.Setup
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
-    public class ConfigureDi
+    public static class ConfigureDi
     {
         public static IServiceProvider BuildDi(IConfigurationRoot configuration)
         {
