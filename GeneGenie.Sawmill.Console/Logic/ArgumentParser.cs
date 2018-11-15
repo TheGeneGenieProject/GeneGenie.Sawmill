@@ -15,7 +15,11 @@ namespace GeneGenie.Sawmill.Console.Logic
         {
             var appArguments = new AppArguments();
 
-            if (args == null || args.Length != 2)
+            if (args == null)
+            {
+                appArguments.Errors.Add("Expected 2 arguments but did not receive any.");
+            }
+            else if (args.Length != 2)
             {
                 appArguments.Errors.Add($"Expected 2 arguments but received {args.Length}.");
             }
