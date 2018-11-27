@@ -46,7 +46,7 @@ namespace GeneGenie.Sawmill
         /// </summary>
         public async Task ProcessTreeDataAsync()
         {
-            List<FamilyTree> trees;
+            List<WhoWhatWhereWhen> trees;
 
             if (await treeWriter.TargetExistsAsync())
             {
@@ -64,12 +64,9 @@ namespace GeneGenie.Sawmill
 
             foreach (var tree in trees)
             {
-                logger?.LogInformation((int)LogEventIds.CheckingTree, "Checking tree {treeId} with match '{matchName}'.", tree.TreeId, tree.MatchName);
-                foreach (var person in tree.People)
-                {
-                    person.Birth.Location = await GeocodeLocationAsync(person.Birth.Location);
-                    person.Death.Location = await GeocodeLocationAsync(person.Death.Location);
-                }
+                //logger?.LogInformation((int)LogEventIds.CheckingTree, "Checking tree {treeId} with match '{matchName}'.", tree.TreeId, tree.MatchName);
+                //foreach (var treeEvent in tree)
+                tree.Where.Location = await GeocodeLocationAsync(tree.Where.Location);
             }
 
             await treeWriter.WriteAllAsync(trees);

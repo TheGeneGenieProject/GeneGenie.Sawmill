@@ -62,7 +62,7 @@ namespace GeneGenie.Sawmill.Tests.TreeAnalysis
         }
 
         [Fact]
-        public async Task Error_is_indicated_people_are_not_found()
+        public async Task Error_is_indicated_when_people_are_not_found()
         {
             var jsonTreeWriter = new JsonTreeWriter(null, $@"Data\\Empty.json");
             var trees = await jsonTreeWriter.ReadAllAsync();

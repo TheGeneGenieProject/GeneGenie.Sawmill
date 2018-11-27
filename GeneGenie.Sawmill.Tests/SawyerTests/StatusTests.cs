@@ -30,20 +30,20 @@ namespace GeneGenie.Sawmill.Tests.SawyerTests
             var sawyer = fakeSawyerFactory.Create();
             await sawyer.ProcessTreeDataAsync();
 
-            var people = fakeSawyerFactory.TreeWriter.Trees.Single().People;
+            var peopleEvents = fakeSawyerFactory.TreeWriter.Trees;
 
             foreach (SawmillStatus sawmillStatus in Enum.GetValues(typeof(SawmillStatus)))
             {
                 // Find the person for this enum status test.
-                var person = people.Single(p => p.FirstName == sawmillStatus.ToString());
+                var person = peopleEvents.First(p => p.Who.FirstName == sawmillStatus.ToString());
 
                 // Find the expected status of the location after geocoding.
-                if (!Enum.TryParse<SawmillStatus>(person.LastName, out var expectedStatus))
+                if (!Enum.TryParse<SawmillStatus>(person.Who.LastName, out var expectedStatus))
                 {
                     throw new MissingFieldException($"There should be a row of personal data to test the enum value {sawmillStatus} but it is missing.");
                 }
 
-                Assert.Equal(expectedStatus, person.Birth.Location.Status);
+                Assert.Equal(expectedStatus, person.Where.Location.Status);
             }
         }
     }

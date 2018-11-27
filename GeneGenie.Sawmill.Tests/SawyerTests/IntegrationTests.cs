@@ -71,12 +71,12 @@ namespace GeneGenie.Sawmill.Tests
         public async Task Output_records_marked_as_in_error_are_updated_on_second_pass()
         {
             await sawyer.ProcessTreeDataAsync();
-            var person = fakeSawyerFactory.TreeWriter.Trees.First().People.First();
-            person.Birth.Location.Status = SawmillStatus.TemporaryGeocodeError;
+            var personEvent = fakeSawyerFactory.TreeWriter.Trees.First(p => p.What.EventType == PersonEventType.Birth);
+            personEvent.Where.Location.Status = SawmillStatus.TemporaryGeocodeError;
 
             await sawyer.ProcessTreeDataAsync();
 
-            Assert.Equal(SawmillStatus.Geocoded, person.Birth.Location.Status);
+            Assert.Equal(SawmillStatus.Geocoded, personEvent.Where.Location.Status);
         }
 
         [Fact]
@@ -84,8 +84,8 @@ namespace GeneGenie.Sawmill.Tests
         {
             await sawyer.ProcessTreeDataAsync();
 
-            var person = fakeSawyerFactory.TreeWriter.Trees.First().People.Single(p => p.FirstName == "UnknownBirthPlace");
-            Assert.Equal(SawmillStatus.KnownErroneous, person.Birth.Location.Status);
+            var personEvent = fakeSawyerFactory.TreeWriter.Trees.First(p => p.Who.FirstName == "UnknownBirthPlace");
+            Assert.Equal(SawmillStatus.KnownErroneous, personEvent.Where.Location.Status);
         }
 
         [Fact]
@@ -93,8 +93,8 @@ namespace GeneGenie.Sawmill.Tests
         {
             await sawyer.ProcessTreeDataAsync();
 
-            var person = fakeSawyerFactory.TreeWriter.Trees.First().People.Single(p => p.FirstName == "InvalidDate");
-            Assert.Equal(DateQualityStatus.NotValid, person.Birth.DateRange.Status);
+            var personEvent = fakeSawyerFactory.TreeWriter.Trees.First(p => p.Who.FirstName == "InvalidDate");
+            Assert.Equal(DateQualityStatus.NotValid, personEvent.When.DateRange.Status);
         }
 
         [Fact]
@@ -102,8 +102,8 @@ namespace GeneGenie.Sawmill.Tests
         {
             await sawyer.ProcessTreeDataAsync();
 
-            var person = fakeSawyerFactory.TreeWriter.Trees.First().People.Single(p => p.FirstName == "ValidDate");
-            Assert.Equal(DateQualityStatus.OK, person.Birth.DateRange.Status);
+            var personEvent = fakeSawyerFactory.TreeWriter.Trees.First(p => p.Who.FirstName == "ValidDate");
+            Assert.Equal(DateQualityStatus.OK, personEvent.When.DateRange.Status);
         }
 
         [Fact]
@@ -111,8 +111,8 @@ namespace GeneGenie.Sawmill.Tests
         {
             await sawyer.ProcessTreeDataAsync();
 
-            var person = fakeSawyerFactory.TreeWriter.Trees.First().People.Single(p => p.FirstName == "ValidBirthPlace");
-            Assert.Equal(SawmillStatus.Geocoded, person.Birth.Location.Status);
+            var personEvent = fakeSawyerFactory.TreeWriter.Trees.First(p => p.Who.FirstName == "ValidBirthPlace");
+            Assert.Equal(SawmillStatus.Geocoded, personEvent.Where.Location.Status);
         }
     }
 }

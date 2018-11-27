@@ -5,6 +5,7 @@
 
 namespace GeneGenie.Sawmill.Tests
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using GeneGenie.Sawmill.Tests.Setup;
     using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +50,9 @@ namespace GeneGenie.Sawmill.Tests
         {
             var trees = await ParseTreesFromFilePathAsync(@"Data\Ryan's family tree.csv");
 
-            Assert.Single(trees);
+            var grouped = trees.GroupBy(t => t.Who.TreeId);
+
+            Assert.Single(grouped);
         }
 
         [Fact]
@@ -57,7 +60,9 @@ namespace GeneGenie.Sawmill.Tests
         {
             var trees = await ParseTreesFromFilePathAsync(@"Data\Two trees.csv");
 
-            Assert.Equal(2, trees.Count);
+            var grouped = trees.GroupBy(t => t.Who.TreeId);
+
+            Assert.Equal(2, grouped.Count());
         }
     }
 }

@@ -55,7 +55,7 @@ namespace GeneGenie.Sawmill.Models
 
         GeocodingLocations = 20,
 
-        CheckingTree = 21,
+        // CheckingTree = 21,
 
         CheckingCache = 22,
     }

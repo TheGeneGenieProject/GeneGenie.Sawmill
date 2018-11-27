@@ -10,18 +10,19 @@ namespace GeneGenie.Sawmill.Interfaces
     using GeneGenie.Sawmill.Models;
 
     /// <summary>
-    /// Defines an interface for writing tree data. Storage implementations use this to
+    /// Defines an interface for writing tree data as a set of information ready to be plotted
+    /// in 3d space. Storage implementations use this to
     /// deal with different types of storage (CSV on disk, JSON in Azure, SQL etc.).
-    /// Additionally implementors also need to provide methods for reading from <see cref="ITreeReader"/>
+    /// Implementors need to provide methods for reading as well
     /// so that the current status of the tree in storage can be calculated (it may only be partially
     /// processed with records in a failed state).
     /// </summary>
     public interface ITreeWriter
     {
-        Task<List<FamilyTree>> ReadAllAsync();
+        Task<List<WhoWhatWhereWhen>> ReadAllAsync();
 
         Task<bool> TargetExistsAsync();
 
-        Task WriteAllAsync(List<FamilyTree> trees);
+        Task WriteAllAsync(List<WhoWhatWhereWhen> whoWhatWhereWhen);
     }
 }

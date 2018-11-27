@@ -13,35 +13,36 @@ namespace GeneGenie.Sawmill
 
     public class TreeAnalyser
     {
-        public TreeStatistics GenerateStatistics(List<FamilyTree> trees)
+        public TreeStatistics GenerateStatistics(List<WhoWhatWhereWhen> whoWhatWhereWhen)
         {
             var treeStatistics = new TreeStatistics();
 
-            if (trees == null)
+            if (whoWhatWhereWhen == null)
             {
                 treeStatistics.TreesAreEmpty = true;
                 return treeStatistics;
             }
 
-            treeStatistics.TreesAreEmpty = !trees.Any();
-            treeStatistics.NumberOfTrees = trees.Count;
+            treeStatistics.TreesAreEmpty = !whoWhatWhereWhen.Any();
+            treeStatistics.NumberOfTrees = whoWhatWhereWhen.GroupBy(g => g.Who.TreeId).Count();
 
-            var people = trees.SelectMany(p => p.People).ToList();
-
-            PopulateDateStatistics(treeStatistics, people);
-            PopulateLocationStatistics(treeStatistics, people);
+            PopulateDateStatistics(treeStatistics, whoWhatWhereWhen);
+            PopulateLocationStatistics(treeStatistics, whoWhatWhereWhen);
 
             return treeStatistics;
         }
 
-        private static void PopulateDateStatistics(TreeStatistics treeStatistics, List<TreePerson> people)
+        private static void PopulateDateStatistics(TreeStatistics treeStatistics, List<WhoWhatWhereWhen> whoWhatWhereWhen)
         {
-            treeStatistics.PeopleNotFound = !people.Any();
-            treeStatistics.NumberOfPeople = people.Count;
+            var peopleGrouped = whoWhatWhereWhen
+                .GroupBy(g => g.Who.Id)
+                .ToList();
 
-            var allDates = people
-                .Select(p => p.Birth.DateRange)
-                .Concat(people.Select(p => p.Death.DateRange))
+            treeStatistics.PeopleNotFound = !peopleGrouped.Any();
+            treeStatistics.NumberOfPeople = peopleGrouped.Count();
+
+            var allDates = whoWhatWhereWhen
+                .Select(p => p.When.DateRange)
                 .ToList();
 
             var dateStatusEnums = Enum.GetValues(typeof(DateQualityStatus));
@@ -63,11 +64,10 @@ namespace GeneGenie.Sawmill
                 .Any(d => d.Count > 0);
         }
 
-        private static void PopulateLocationStatistics(TreeStatistics treeStatistics, List<TreePerson> people)
+        private static void PopulateLocationStatistics(TreeStatistics treeStatistics, List<WhoWhatWhereWhen> whoWhatWhereWhen)
         {
-            var allLocations = people
-                .Select(p => p.Birth.Location)
-                .Concat(people.Select(p => p.Death.Location))
+            var allLocations = whoWhatWhereWhen
+                .Select(p => p.Where.Location)
                 .ToList();
 
             var locationStatusEnums = Enum.GetValues(typeof(SawmillStatus));

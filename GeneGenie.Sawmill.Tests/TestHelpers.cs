@@ -18,7 +18,7 @@ namespace GeneGenie.Sawmill.Tests
         public const string RyansTreeCsv = @"Data\Ryan's family tree.csv";
         public const string TwoTreesCsv = @"Data\Two trees.csv";
 
-        public static async Task<List<FamilyTree>> ParseTreesFromFilePathAsync(string filePath)
+        public static async Task<List<WhoWhatWhereWhen>> ParseTreesFromFilePathAsync(string filePath)
         {
             var csvLoader = new CsvTreeReader(filePath, null);
             var imported = await csvLoader.ReadAllAsync();

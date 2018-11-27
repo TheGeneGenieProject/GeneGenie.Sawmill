@@ -24,13 +24,13 @@ namespace GeneGenie.Sawmill.IO
             this.pathToFile = pathToFile;
         }
 
-        public async Task<List<FamilyTree>> ReadAllAsync()
+        public async Task<List<WhoWhatWhereWhen>> ReadAllAsync()
         {
-            var trees = new List<FamilyTree>();
+            var whoWhatWhereWhen = new List<WhoWhatWhereWhen>();
 
             if (string.IsNullOrWhiteSpace(pathToFile) || !(await TargetExistsAsync()))
             {
-                return trees;
+                return whoWhatWhereWhen;
             }
 
             logger?.LogInformation((int)LogEventIds.TreeWriterReadingFile, "Reading '{pathToFile}'.", pathToFile);
@@ -38,7 +38,7 @@ namespace GeneGenie.Sawmill.IO
             {
                 var json = await sr.ReadToEndAsync();
 
-                return JsonConvert.DeserializeObject<List<FamilyTree>>(json);
+                return JsonConvert.DeserializeObject<List<WhoWhatWhereWhen>>(json);
             }
         }
 
@@ -47,9 +47,9 @@ namespace GeneGenie.Sawmill.IO
             return await Task.FromResult(File.Exists(pathToFile));
         }
 
-        public async Task WriteAllAsync(List<FamilyTree> trees)
+        public async Task WriteAllAsync(List<WhoWhatWhereWhen> whoWhatWhereWhen)
         {
-            var json = JsonConvert.SerializeObject(trees, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.Indented });
+            var json = JsonConvert.SerializeObject(whoWhatWhereWhen, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.Indented });
 
             using (var sw = new StreamWriter(pathToFile))
             {

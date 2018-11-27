@@ -13,9 +13,9 @@ namespace GeneGenie.Sawmill.Tests.Fakes
 
     public class FakeTreeWriter : ITreeWriter
     {
-        public List<FamilyTree> Trees { get; } = new List<FamilyTree>();
+        public List<WhoWhatWhereWhen> Trees { get; } = new List<WhoWhatWhereWhen>();
 
-        public async Task<List<FamilyTree>> ReadAllAsync()
+        public async Task<List<WhoWhatWhereWhen>> ReadAllAsync()
         {
             return await Task.FromResult(Trees);
         }
@@ -25,7 +25,7 @@ namespace GeneGenie.Sawmill.Tests.Fakes
             return await Task.FromResult(Trees.Any());
         }
 
-        public async Task WriteAllAsync(List<FamilyTree> trees)
+        public async Task WriteAllAsync(List<WhoWhatWhereWhen> trees)
         {
             Trees.AddRange(trees);
             await Task.CompletedTask;
