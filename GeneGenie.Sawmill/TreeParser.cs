@@ -35,19 +35,7 @@ namespace GeneGenie.Sawmill
                     What = new What { EventType = PersonEventType.Birth },
                     When = new When { DateRange = dateParser.Parse(p.BirthDate) },
                     Where = new Where { Location = locationCreator.Create(p.BirthPlace) },
-                    Who = new Who
-                    {
-                        FatherId = p.FatherId.NullSafeTrim(),
-                        FirstName = p.FirstName.NullSafeTrim(),
-                        Gender = ParseGender(p.Gender),
-                        Generation = ParseGeneration(p.Generation),
-                        Id = p.TreeId.NullSafeTrim(),
-                        LastName = p.LastName.NullSafeTrim(),
-                        MatchName = p.MatchName,
-                        MiddleName = p.MiddleName.NullSafeTrim(),
-                        MotherId = p.MotherId.NullSafeTrim(),
-                        TreeId = p.ResultId.NullSafeTrim(),
-                    },
+                    Who = ProjectPersonToWho(p),
                 })
                 .ToList();
             var deathEvents = imported
@@ -56,22 +44,27 @@ namespace GeneGenie.Sawmill
                     What = new What { EventType = PersonEventType.Death },
                     When = new When { DateRange = dateParser.Parse(p.DeathDate) },
                     Where = new Where { Location = locationCreator.Create(p.DeathPlace) },
-                    Who = new Who
-                    {
-                        FatherId = p.FatherId.NullSafeTrim(),
-                        FirstName = p.FirstName.NullSafeTrim(),
-                        Gender = ParseGender(p.Gender),
-                        Generation = ParseGeneration(p.Generation),
-                        Id = p.TreeId.NullSafeTrim(),
-                        LastName = p.LastName.NullSafeTrim(),
-                        MatchName = p.MatchName,
-                        MiddleName = p.MiddleName.NullSafeTrim(),
-                        MotherId = p.MotherId.NullSafeTrim(),
-                        TreeId = p.ResultId.NullSafeTrim(),
-                    },
+                    Who = ProjectPersonToWho(p),
                 })
                 .ToList();
             return birthEvents.Concat(deathEvents).ToList();
+        }
+
+        private Who ProjectPersonToWho(PersonImport person)
+        {
+            return new Who
+            {
+                FatherId = person.FatherId.NullSafeTrim(),
+                FirstName = person.FirstName.NullSafeTrim(),
+                Gender = ParseGender(person.Gender),
+                Generation = ParseGeneration(person.Generation),
+                Id = person.TreeId.NullSafeTrim(),
+                LastName = person.LastName.NullSafeTrim(),
+                MatchName = person.MatchName,
+                MiddleName = person.MiddleName.NullSafeTrim(),
+                MotherId = person.MotherId.NullSafeTrim(),
+                TreeId = person.ResultId.NullSafeTrim(),
+            };
         }
 
         private PersonGender ParseGender(string gender)
