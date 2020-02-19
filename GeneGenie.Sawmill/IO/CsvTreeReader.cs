@@ -35,7 +35,7 @@ namespace GeneGenie.Sawmill.IO
 
             using (var sr = new StreamReader(pathToCsvFile))
             {
-                using (var csv = new CsvHelper.CsvReader(sr))
+                using (var csv = new CsvHelper.CsvReader(sr, System.Globalization.CultureInfo.InvariantCulture))
                 {
                     csv.Configuration.RegisterClassMap<CsvTreeReaderMap>();
                     csv.Configuration.BadDataFound = context =>

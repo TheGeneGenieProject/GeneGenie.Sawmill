@@ -49,14 +49,15 @@ namespace GeneGenie.Sawmill.Tests.Setup
                 .AddScoped<FakeLogger<CsvTreeReader>>()
                 .AddScoped<FakeLogger<JsonTreeWriter>>()
 
+                .AddLogging(opt =>
+                {
+                    opt.AddConsole();
+                })
+
                 // Replace the real geocoder lib with our fake, we're not testing that here (it belongs to another package).
                 .RemoveAll<IGeocodeManager>()
                 .AddTransient<IGeocodeManager, FakeGeocodeManager>()
                 .BuildServiceProvider();
-
-            serviceProvider
-                .GetService<ILoggerFactory>()
-                .AddConsole(LogLevel.Debug);
 
             return serviceProvider;
         }
